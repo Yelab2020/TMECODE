@@ -1,3 +1,8 @@
+## The ASEN score was used to quantify the colocalization of cell types in the same spot. 
+## By establishing the ASEN algorithm, we calculate the stable expression for each gene in the spot and estimate the detection probability of a cell cluster based on the number of cell cluster-specific genes expressed. 
+## Then, a permutation method generates a background distribution and the detection probability for each cell cluster is calculated, 
+## and their product gives the final probability of detecting multiple cell clusters simultaneously within that spot (see Methods)
+
 cal.prob=function(seurat.obj,marker.list,quantile=0.05){
   binary.mat=t(apply(seurat.obj@assays$Spatial@data,1,function(gexpr){
     gexpr1=gexpr[gexpr>0]
@@ -35,3 +40,4 @@ for (x in c('SPP1+ Macro','CCL3+ Neutrophil','FAP+ Fibroblasts','Tip Cells')) {
 TumorST@meta.data$'SignatureScore' <- apply(TumorST@meta.data[,c('SPP1+ Macro','Tip Cells','FAP+ Fibroblasts','CCL3+ Neutrophil')],1,mean)
 prob <- cal.prob(TumorST,FourTypesSignature,quantile = 0.05)
 TumorST$ASEN_Score <- TumorST$SignatureScore*prob
+                             
